@@ -1,4 +1,4 @@
-const CACHE_NAME = 'multi-sheet-checker-v1.1';
+const CACHE_NAME = 'multi-sheet-checker-v1.2';
 const BASE_PATH = '/checklist'; // Define base path here - Corrected to 'checklist'
 
 const urlsToCache = [
