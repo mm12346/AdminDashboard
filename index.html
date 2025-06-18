@@ -118,7 +118,7 @@
                         </button>
                         <button id="logoutButton" class="px-4 py-3 bg-red-500 text-white font-semibold rounded-xl shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition flex items-center space-x-2">
                              <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
-                            <span class="text">ออกจากระบบ</span>
+                            <span class="text"></span>
                         </button>
                     </div>
                 </div>
@@ -156,15 +156,28 @@
                     <input type="number" id="targetCountInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
                 </div>
             </div>
-            <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
-                 <div class="flex space-x-3">
-                    <button id="addCardBtn" class="px-5 py-2 bg-fuchsia-500 text-white font-semibold rounded-xl shadow hover:bg-fuchsia-600 transition">เพิ่มการ์ดใหม่</button>
-                    <button id="deleteCardBtn" class="px-5 py-2 bg-red-500 text-white font-semibold rounded-xl shadow hover:bg-red-600 transition">ลบการ์ดที่เลือก</button>
-                 </div>
-                 <button id="saveAllSettingsBtn" class="px-5 py-2 bg-blue-500 text-white font-semibold rounded-xl shadow hover:bg-blue-600 transition flex items-center justify-center space-x-2 disabled:opacity-50">
-                    <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    <span class="text">บันทึกการเปลี่ยนแปลงทั้งหมด</span>
-                 </button>
+            <!-- Updated Button Layout -->
+            <div class="flex flex-col-reverse sm:flex-row sm:justify-between items-center gap-3 pt-4 mt-4 border-t">
+                <!-- Destructive Action on the left -->
+                <div>
+                    <button id="deleteCardBtn" class="w-full sm:w-auto px-5 py-2 bg-red-600 text-white font-semibold rounded-xl shadow hover:bg-red-700 transition flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                        <span class="text">ลบการ์ดที่เลือก</span>
+                    </button>
+                </div>
+
+                <!-- Constructive Actions on the right -->
+                <div class="flex flex-col-reverse sm:flex-row gap-3 w-full sm:w-auto">
+                    <button id="addCardBtn" class="w-full sm:w-auto px-5 py-2 bg-green-500 text-white font-semibold rounded-xl shadow hover:bg-green-600 transition flex items-center justify-center space-x-2">
+                        <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span class="text">เพิ่มการ์ดใหม่</span>
+                    </button>
+                    <button id="saveAllSettingsBtn" class="w-full sm:w-auto px-5 py-2 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                        <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span class="text">บันทึกการเปลี่ยนแปลงทั้งหมด</span>
+                    </button>
+                </div>
             </div>
             <div id="settings-feedback" class="mt-4 text-center text-green-600 text-sm h-5"></div>
         </div>
@@ -239,7 +252,8 @@
             // This handles buttons with an icon and text, or just text.
             if (icon) {
                  icon.classList.toggle('hidden', show);
-                 text.classList.toggle('hidden', show); // Show text when not loading
+                 // The text span next to an icon should also be toggled
+                 if(text) text.classList.toggle('hidden', show);
             } else if (text) {
                  text.classList.toggle('hidden', show);
             }
