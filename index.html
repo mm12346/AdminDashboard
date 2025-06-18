@@ -8,171 +8,157 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Web App Manifest for PWA capabilities -->
-    <link rel="manifest" href="/checklist/manifest.json">
+    
+    <!-- PWA Manifest & Theme -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3B82F6">
+
+    <!-- PWA Icons for Apple Devices -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Multi-Sheet Checker">
-    <meta name="mobile-web-app-capable" content="yes"> <!-- Added for modern PWA compatibility -->
-    <link rel="apple-touch-icon" href="/checklist/icons/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/checklist/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/checklist/icons/favicon-16x16.png">
-    <meta name="theme-color" content="#3B82F6"> <!-- Matches blue-500 from Tailwind -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ตรวจสอบข้อมูล">
 
     <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #f8fafc; /* bg-slate-50 */
-        }
-        .loader {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: inline-block;
-            position: relative;
-            border: 3px solid;
-            border-color: #CBD5E1 #CBD5E1 transparent transparent; /* slate-300 */
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-        }
-        .loader::after {
-            content: '';  
-            box-sizing: border-box;
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            margin: auto;
-            border: 3px solid;
-            border-color: transparent transparent #3B82F6 #3B82F6; /* blue-500 */
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            animation: rotationBack 0.5s linear infinite;
-            transform-origin: center center;
-        }
-        @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        } 
-        @keyframes rotationBack {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
-        }
-        /* Modal Styles */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border-radius: 1rem; /* rounded-2xl */
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-xl */
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-        }
-        .close-button {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-        .close-button:hover,
-        .close-button:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+        body { font-family: 'Sarabun', sans-serif; background-color: #f8fafc; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content { background-color: #fefefe; margin: auto; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); width: 100%; max-width: 600px; position: relative; }
+        .close-button { position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; }
+        .close-button:hover, .close-button:focus { color: black; text-decoration: none; }
+        .loader-sm { width: 20px; height: 20px; }
+        .loader-lg { width: 48px; height: 48px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 bg-slate-50">
+<body class="min-h-screen flex items-center justify-center p-4 bg-slate-50">
 
-    <div class="mb-6 flex space-x-4 items-center">
-        <!-- Global Date Input -->
-        <div class="flex-grow">
-            <label for="globalCheckDate" class="sr-only">เลือกวันที่</label>
-            <input type="date" id="globalCheckDate" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition placeholder:text-slate-400 text-base">
+    <!-- Auth Container -->
+    <div id="auth-container" class="w-full max-w-md">
+        <!-- Login Screen -->
+        <div id="login-screen">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">ลงชื่อเข้าใช้</h2>
+                <p class="text-center text-slate-500 mb-8">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+                <form id="login-form">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
+                            <input type="text" id="username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
+                            <input type="password" id="password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                    </div>
+                    <div id="login-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
+                    <button type="submit" class="w-full mt-4 px-6 py-4 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                        <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span class="text">เข้าสู่ระบบ</span>
+                    </button>
+                </form>
+                <p class="text-center text-sm text-slate-500 mt-6">
+                    ยังไม่มีบัญชี? <a href="#" id="show-register-link" class="font-medium text-blue-600 hover:text-blue-500">สมัครสมาชิกที่นี่</a>
+                </p>
+            </div>
         </div>
         
-        <button id="refreshButton" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75 transition-all duration-300 flex items-center space-x-2">
-            <!-- Refresh Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 12a9 9 0 019-9 9.75 9.75 0 016.74 2.74L21 8" />
-                <path d="M21 3v5h-5" />
-                <path d="M21 12a9 9 0 01-9 9 9.75 9.75 0 01-6.74-2.74L3 16" />
-                <path d="M3 21v-5h5" />
-            </svg>
-            <span>รีเฟรช</span>
-        </button>
-
-        <button id="settingsButton" class="px-6 py-3 bg-slate-600 text-white font-semibold rounded-xl shadow-lg hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-opacity-75 transition-all duration-300 flex items-center space-x-2">
-            <!-- Settings Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00-.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V12a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z" />
-            </svg>
-            <span>ตั้งค่า</span>
-        </button>
+        <!-- Register Screen (Initially hidden) -->
+        <div id="register-screen" class="hidden">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
+                <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">สมัครสมาชิกใหม่</h2>
+                <p class="text-center text-slate-500 mb-8">สร้างบัญชีเพื่อเริ่มใช้งาน</p>
+                <form id="register-form">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="register-username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
+                            <input type="text" id="register-username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="register-password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
+                            <input type="password" id="register-password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div>
+                            <label for="confirm-password" class="block text-sm font-medium text-slate-600 mb-1">ยืนยันรหัสผ่าน</label>
+                            <input type="password" id="confirm-password" name="confirmPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                    </div>
+                    <div id="register-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
+                    <div id="register-success" class="mt-4 text-center text-green-600 text-sm h-5"></div>
+                    <button type="submit" class="w-full mt-4 px-6 py-4 bg-green-500 text-white font-semibold rounded-xl shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                        <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        <span class="text">ลงทะเบียน</span>
+                    </button>
+                </form>
+                 <p class="text-center text-sm text-slate-500 mt-6">
+                    มีบัญชีอยู่แล้ว? <a href="#" id="show-login-link" class="font-medium text-blue-600 hover:text-blue-500">กลับไปหน้าล็อกอิน</a>
+                </p>
+            </div>
+        </div>
     </div>
 
-    <div id="app-container" class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Cards will be dynamically inserted here -->
+    <!-- Main App Screen (Initially hidden) -->
+    <div id="main-app" class="hidden w-full max-w-7xl flex-col items-center">
+        <div class="w-full max-w-4xl mb-6 flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
+            <div class="flex-grow w-full sm:w-auto">
+                <input type="date" id="globalCheckDate" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+            </div>
+            <div class="flex gap-2 sm:gap-4 flex-wrap justify-center">
+                <button id="refreshButton" class="px-4 py-3 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                     <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                    <span class="text">รีเฟรช</span>
+                </button>
+                <button id="settingsButton" class="px-4 py-3 bg-slate-600 text-white font-semibold rounded-xl shadow-lg hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                     <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                    <span class="text">ตั้งค่า</span>
+                </button>
+                <button id="logoutButton" class="px-4 py-3 bg-red-500 text-white font-semibold rounded-xl shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition flex items-center space-x-2">
+                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
+                    <span class="text">ออกจากระบบ</span>
+                </button>
+            </div>
+        </div>
+        <div id="app-container" class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </div>
 
     <!-- Settings Modal -->
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <span class="close-button" id="closeSettingsModal">&times;</span>
-            <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">ตั้งค่าการ์ด</h2>
-
+            <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">จัดการการ์ด</h2>
             <div class="mb-4">
-                <label for="cardSelect" class="block text-sm font-medium text-slate-600 mb-1">เลือกการ์ด:</label>
-                <select id="cardSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base">
-                    <!-- Options will be populated by JS -->
-                </select>
+                <label for="cardSelect" class="block text-sm font-medium text-slate-600 mb-1">เลือกการ์ดที่จะแก้ไข:</label>
+                <select id="cardSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition"></select>
             </div>
-
-            <div class="space-y-4 mb-6">
+            <div id="settings-form-fields" class="space-y-4 mb-6 border-t border-b border-slate-200 py-6">
                 <div>
                     <label for="titleInput" class="block text-sm font-medium text-slate-600 mb-1">ชื่อการ์ด (Title):</label>
-                    <input type="text" id="titleInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base">
+                    <input type="text" id="titleInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div>
                     <label for="sheetIdInput" class="block text-sm font-medium text-slate-600 mb-1">รหัสชีต (Sheet ID):</label>
-                    <input type="text" id="sheetIdInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base">
+                    <input type="text" id="sheetIdInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div>
                     <label for="sheetNameInput" class="block text-sm font-medium text-slate-600 mb-1">ชื่อชีต (Sheet Name):</label>
-                    <input type="text" id="sheetNameInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base">
+                    <input type="text" id="sheetNameInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
                 </div>
                 <div>
                     <label for="targetCountInput" class="block text-sm font-medium text-slate-600 mb-1">จำนวนเป้าหมาย (Target Count):</label>
-                    <input type="number" id="targetCountInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-base">
+                    <input type="number" id="targetCountInput" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
                 </div>
             </div>
-
-            <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
-                <button id="addCardBtn" class="px-5 py-2 bg-green-500 text-white font-semibold rounded-xl shadow hover:bg-green-600 transition">เพิ่มการ์ดใหม่</button>
-                <button id="deleteCardBtn" class="px-5 py-2 bg-red-500 text-white font-semibold rounded-xl shadow hover:bg-red-600 transition">ลบการ์ดที่เลือก</button>
-                <button id="saveSettingsBtn" class="px-5 py-2 bg-blue-500 text-white font-semibold rounded-xl shadow hover:bg-blue-600 transition">บันทึกการเปลี่ยนแปลง</button>
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0 sm:space-x-3">
+                 <div class="flex space-x-3">
+                    <button id="addCardBtn" class="px-5 py-2 bg-fuchsia-500 text-white font-semibold rounded-xl shadow hover:bg-fuchsia-600 transition">เพิ่มการ์ดใหม่</button>
+                    <button id="deleteCardBtn" class="px-5 py-2 bg-red-500 text-white font-semibold rounded-xl shadow hover:bg-red-600 transition">ลบการ์ดที่เลือก</button>
+                 </div>
+                 <button id="saveAllSettingsBtn" class="px-5 py-2 bg-blue-500 text-white font-semibold rounded-xl shadow hover:bg-blue-600 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                    <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span class="text">บันทึกการเปลี่ยนแปลงทั้งหมด</span>
+                 </button>
             </div>
+            <div id="settings-feedback" class="mt-4 text-center text-green-600 text-sm h-5"></div>
         </div>
     </div>
 
@@ -189,408 +175,366 @@
     </div>
 
     <script>
-        // Base URL for the Google Apps Script deployment
-        const SCRIPT_URL_BASE = 'https://script.google.com/macros/s/AKfycbxDwbVoLfFR7uXoWDgPv6Jb-xSXY83GBznZpu9U0Gw0J0CGkQs_iMTbmP5--dc0WLc6/exec';
-
-        // Default configurations for each card/sheet
-        // These will be used if no settings are found in localStorage
-        // The array is now empty to start with no pre-filled data.
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmoUqArgGqoSdnA1OVCJzKjnOgppLxFSbhjh2nAXVoCNnr-dyGV2XfonwE4LHIHtkJ/exec';
         let cardConfigurations = [];
+        let localCardSettings = [];
+        let loggedInUser = null;
+        const dataCache = {};
 
-        // DOM Elements
-        const appContainer = document.getElementById('app-container');
-        const refreshButton = document.getElementById('refreshButton');
-        const settingsButton = document.getElementById('settingsButton');
-        const globalCheckDateInput = document.getElementById('globalCheckDate'); // New global date input
-        const settingsModal = document.getElementById('settingsModal');
-        const closeSettingsModalBtn = document.getElementById('closeSettingsModal');
-        const cardSelect = document.getElementById('cardSelect');
-        const titleInput = document.getElementById('titleInput');
-        const sheetIdInput = document.getElementById('sheetIdInput');
-        const sheetNameInput = document.getElementById('sheetNameInput');
-        const targetCountInput = document.getElementById('targetCountInput');
-        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-        const addCardBtn = document.getElementById('addCardBtn');
-        const deleteCardBtn = document.getElementById('deleteCardBtn');
+        // --- DOM Elements ---
+        const authContainer = document.getElementById('auth-container'),
+            loginScreen = document.getElementById('login-screen'),
+            loginForm = document.getElementById('login-form'),
+            loginError = document.getElementById('login-error'),
+            showRegisterLink = document.getElementById('show-register-link'),
+            registerScreen = document.getElementById('register-screen'),
+            registerForm = document.getElementById('register-form'),
+            registerError = document.getElementById('register-error'),
+            registerSuccess = document.getElementById('register-success'),
+            showLoginLink = document.getElementById('show-login-link'),
+            mainApp = document.getElementById('main-app'),
+            appContainer = document.getElementById('app-container'),
+            refreshButton = document.getElementById('refreshButton'),
+            settingsButton = document.getElementById('settingsButton'),
+            logoutButton = document.getElementById('logoutButton'),
+            globalCheckDateInput = document.getElementById('globalCheckDate'),
+            settingsModal = document.getElementById('settingsModal'),
+            closeSettingsModalBtn = document.getElementById('closeSettingsModal'),
+            cardSelect = document.getElementById('cardSelect'),
+            settingsFormFields = document.getElementById('settings-form-fields'),
+            titleInput = document.getElementById('titleInput'),
+            sheetIdInput = document.getElementById('sheetIdInput'),
+            sheetNameInput = document.getElementById('sheetNameInput'),
+            targetCountInput = document.getElementById('targetCountInput'),
+            saveAllSettingsBtn = document.getElementById('saveAllSettingsBtn'),
+            addCardBtn = document.getElementById('addCardBtn'),
+            deleteCardBtn = document.getElementById('deleteCardBtn'),
+            settingsFeedback = document.getElementById('settings-feedback'),
+            deleteConfirmationModal = document.getElementById('deleteConfirmationModal'),
+            confirmDeleteBtn = document.getElementById('confirmDeleteBtn'),
+            cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
-        // Delete Confirmation Modal elements
-        const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
-        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-
-
-        let selectedCardIndex = 0; // To keep track of which card is being edited
-
-        // --- Local Storage Functions ---
-        function loadConfigurations() {
-            const storedConfig = localStorage.getItem('cardConfigurations');
-            if (storedConfig) {
-                try {
-                    cardConfigurations = JSON.parse(storedConfig);
-                } catch (e) {
-                    console.error("Error parsing stored configurations, using default (empty array).", e);
-                    // Fallback to empty array if parsing fails
-                    cardConfigurations = [];
-                }
-            }
+        // --- Utility ---
+        function showFeedback(el, msg, isError = false, duration = 3000) {
+            el.textContent = msg;
+            el.className = `mt-4 text-center text-sm h-5 ${isError ? 'text-red-500' : 'text-green-600'}`;
+            if (duration > 0) setTimeout(() => { el.textContent = ''; }, duration);
         }
 
-        function saveConfigurations() {
-            localStorage.setItem('cardConfigurations', JSON.stringify(cardConfigurations));
-            console.log("Configurations saved to localStorage.");
+        function toggleButtonSpinner(button, show) {
+            const spinner = button.querySelector('.spinner');
+            const icon = button.querySelector('.icon');
+            const text = button.querySelector('.text');
+            if (spinner) spinner.classList.toggle('hidden', !show);
+            // Hide icon if it exists, otherwise hide text
+            if (icon) {
+                 icon.classList.toggle('hidden', show);
+            } else if (text) {
+                 text.classList.toggle('hidden', show);
+            }
+            button.disabled = show;
         }
 
-        // --- Card Rendering Functions ---
-        function createCard(config, index) {
-            const cardId = `card-${index}`;
-            const resultsDivId = `results-${index}`; // No more individual date input ID
-
-            const cardHtml = `
-                <div id="${cardId}" class="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-xl shadow-slate-300/30 p-6 md:p-8 space-y-6">
-                    <div class="text-center">
-                        <h1 class="text-xl sm:text-2xl font-bold text-slate-800">${config.title}</h1>
-                        <p class="text-slate-500 mt-2 text-sm sm:text-base">ข้อมูลสำหรับวันที่เลือก</p>
-                    </div>
-
-                    <!-- Results Section -->
-                    <div id="${resultsDivId}" class="mt-6 p-5 bg-slate-50/70 rounded-xl min-h-[150px] flex items-center justify-center transition-all">
-                        <p class="text-slate-500">กำลังโหลดข้อมูล...</p>
-                    </div>
-                </div>
-            `;
-            appContainer.insertAdjacentHTML('beforeend', cardHtml);
-
-            // Get DOM element for the newly created card's results div
-            const resultsDiv = document.getElementById(resultsDivId);
-
-            // Initial data load for this card using the global date
-            checkSheetData(config, globalCheckDateInput.value, resultsDiv);
+        async function apiCall(action, payload = {}) {
+            const isGet = action.startsWith('load') || action.startsWith('get');
+            const options = { method: isGet ? 'GET' : 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' } };
+            const url = new URL(SCRIPT_URL);
+            if (isGet) {
+                Object.entries({ action, ...payload }).forEach(([key, value]) => url.searchParams.append(key, value));
+            } else {
+                options.body = JSON.stringify({ action, ...payload });
+            }
+            const res = await fetch(url, options);
+            if (!res.ok) throw new Error(`Network error: ${res.statusText}`);
+            const result = await res.json();
+            if (result.error || result.success === false) throw new Error(result.error || 'Unknown API error');
+            return result;
         }
 
-        function renderApp() {
-            appContainer.innerHTML = ''; // Clear existing cards before re-rendering
-            if (cardConfigurations.length === 0) {
-                appContainer.innerHTML = '<p class="text-slate-500 text-center col-span-full">ไม่พบการ์ด กรุณาเพิ่มการ์ดใหม่ในการตั้งค่า</p>';
-                return;
-            }
-            // Use the value from the global date input for all cards
-            const currentGlobalDate = globalCheckDateInput.value;
-            cardConfigurations.forEach((config, index) => {
-                createCard(config, index);
-                // Call checkSheetData again for each card with the current global date
-                // This ensures all cards update when the global date changes
-                checkSheetData(config, currentGlobalDate, document.getElementById(`results-${index}`));
-            });
+        // --- Auth & App Flow ---
+        function switchAuthScreen(showRegister) {
+            loginScreen.style.display = showRegister ? 'none' : 'block';
+            registerScreen.style.display = showRegister ? 'block' : 'none';
         }
 
-        // --- Data Fetching Functions (Modified to use globalDateValue) ---
-        async function checkSheetData(config, dateValue, resultsEl) { // Changed dateInputEl to dateValue
-            
-            if (config.sheetId === 'YOUR_SHEET_ID_HERE' || config.sheetId.startsWith('YOUR_SHEET_ID_')) {
-                renderError(resultsEl, `กรุณาตั้งค่า SHEET_ID ของ '${config.title}' ในโค้ด HTML ก่อน`);
-                return;
-            }
-             if (!dateValue) { // Check dateValue directly
-                resultsEl.innerHTML = '<p class="text-slate-500">กรุณาเลือกวันที่</p>';
-                return;
-            }
+        async function performSuccessfulLogin(username) {
+            loggedInUser = username;
+            localStorage.setItem('loggedInUsername', username); // Save user to localStorage
+            authContainer.style.display = 'none';
+            mainApp.style.display = 'flex';
+            await initializeMainApp();
+        }
 
-            resultsEl.innerHTML = '<div class="loader"></div>'; // Show loader
-
-            const selectedDate = new Date(dateValue); // Use dateValue directly
-
-            let finalUrl = `${SCRIPT_URL_BASE}?sheetId=${encodeURIComponent(config.sheetId)}`;
-            if (config.sheetName) {
-                finalUrl += `&sheetName=${encodeURIComponent(config.sheetName)}`;
-            }
-
+        async function handleLogin(e) {
+            e.preventDefault();
+            const button = e.currentTarget.querySelector('button');
+            showFeedback(loginError, '', false, 0);
+            toggleButtonSpinner(button, true);
             try {
-                const response = await fetch(finalUrl);
-                if (!response.ok) throw new Error('Network response was not ok. Status: ' + response.status);
-                
-                const allRows = await response.json();
-                if (allRows.error) throw new Error('Apps Script Error: ' + allRows.error);
-
-                const foundEntries = [];
-                // Column indices (adjust if your sheet structure changes for different sheets)
-                // COL_DAY, COL_MONTH, COL_YEAR, COL_USER, COL_NUMBER
-                // These are generic, you might need to make them configurable per sheet if layouts vary greatly
-                const COL_DAY = 1, COL_MONTH = 2, COL_YEAR = 3, COL_USER = 7, COL_NUMBER = 9; 
-                
-                for (const columns of allRows) {
-                    if (columns.length > Math.max(COL_YEAR, COL_USER, COL_NUMBER)) {
-                        const day = parseInt(columns[COL_DAY], 10);
-                        const month = parseInt(columns[COL_MONTH], 10);
-                        let year = parseInt(columns[COL_YEAR], 10);
-
-                        if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
-                            // Convert Buddhist year to Gregorian year if applicable
-                            if (year > 2500) year -= 543;
-                            const rowDate = new Date(year, month - 1, day);
-                            
-                            if (!isNaN(rowDate.getTime()) && rowDate.getFullYear() === selectedDate.getFullYear() && rowDate.getMonth() === selectedDate.getMonth() && rowDate.getDate() === selectedDate.getDate()) {
-                                foundEntries.push({
-                                    user: columns[COL_USER] ? String(columns[COL_USER]).trim() : 'ไม่มีข้อมูล',
-                                    number: columns[COL_NUMBER] ? String(columns[COL_NUMBER]).trim() : 'ไม่มีข้อมูล'
-                                });
-                            }
-                        }
-                    }
-                }
-                renderResults(resultsEl, foundEntries, selectedDate.toLocaleDateString('th-TH', { dateStyle: 'long' }), config.targetCount);
+                const username = loginForm.username.value;
+                await apiCall('login', { username, password: loginForm.password.value });
+                await performSuccessfulLogin(username);
             } catch (error) {
-                console.error(`Error fetching or parsing data for ${config.title}:`, error);
-                renderError(resultsEl, `เกิดข้อผิดพลาดในการดึงข้อมูลสำหรับ '${config.title}'<br>โปรดตรวจสอบว่า Sheet ID, Sheet Name ที่ตั้งค่าไว้ถูกต้อง`);
+                showFeedback(loginError, error.message, true);
+            } finally {
+                toggleButtonSpinner(button, false);
             }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const button = e.currentTarget.querySelector('button');
+            showFeedback(registerError, '', false, 0);
+            showFeedback(registerSuccess, '', false, 0);
+            const username = registerForm.username.value;
+            const password = registerForm.password.value;
+            if (password !== registerForm.confirmPassword.value) {
+                showFeedback(registerError, 'รหัสผ่านไม่ตรงกัน', true); return;
+            }
+            toggleButtonSpinner(button, true);
+            try {
+                await apiCall('registerUser', { username, password });
+                showFeedback(registerSuccess, 'ลงทะเบียนสำเร็จ! กำลังเข้าสู่ระบบ...', false, 2000);
+                setTimeout(() => performSuccessfulLogin(username), 500);
+            } catch (error) {
+                showFeedback(registerError, error.message, true);
+            } finally {
+                toggleButtonSpinner(button, false);
+            }
+        }
+
+        function handleLogout() {
+            mainApp.style.display = 'none';
+            authContainer.style.display = 'block';
+            switchAuthScreen(false);
+            loginForm.reset();
+            appContainer.innerHTML = '';
+            loggedInUser = null;
+            localStorage.removeItem('loggedInUsername'); // Clear user from localStorage
+        }
+
+        async function initializeMainApp() {
+            globalCheckDateInput.value = new Date().toISOString().split('T')[0];
+            await loadConfigurations();
+            renderApp();
+        }
+
+        // --- Data & Configuration ---
+        async function loadConfigurations() {
+            if (!loggedInUser) throw new Error("Not logged in");
+            appContainer.innerHTML = `<div class="loader-lg col-span-full mx-auto animate-spin rounded-full border-4 border-slate-200 border-t-blue-500"></div>`;
+            try {
+                const result = await apiCall('loadSettings', { username: loggedInUser });
+                cardConfigurations = Array.isArray(result.config) ? result.config : [];
+            } catch (error) {
+                appContainer.innerHTML = `<p class="text-red-500 text-center col-span-full">เกิดข้อผิดพลาดในการโหลดการตั้งค่า: ${error.message}</p>`;
+                cardConfigurations = [];
+            }
+        }
+
+        async function checkSheetData(config, dateValue, resultsEl) {
+            if (!config.sheetId || !config.sheetName) return renderError(resultsEl, `กรุณาตั้งค่า Sheet ID และ Sheet Name`);
+            if (!dateValue) { resultsEl.innerHTML = '<p class="text-slate-500">กรุณาเลือกวันที่</p>'; return; }
+            resultsEl.innerHTML = `<div class="loader-sm mx-auto animate-spin rounded-full border-2 border-slate-300 border-t-blue-500"></div>`;
+            const cacheKey = `${config.sheetId}-${dateValue}`;
+            if (dataCache[cacheKey]) {
+                return processData(dataCache[cacheKey], resultsEl, config.targetCount);
+            }
+            try {
+                const filteredRows = await apiCall('getSheetData', { sheetId: config.sheetId, sheetName: config.sheetName, date: dateValue });
+                dataCache[cacheKey] = filteredRows;
+                processData(filteredRows, resultsEl, config.targetCount);
+            } catch (error) {
+                renderError(resultsEl, `เกิดข้อผิดพลาด: ${error.message}`);
+            }
+        }
+
+        function processData(dataRows, resultsEl, targetCount) {
+             const dateString = new Date(globalCheckDateInput.value).toLocaleDateString('th-TH', { dateStyle: 'long' });
+             renderResults(resultsEl, dataRows, dateString, targetCount);
+        }
+
+        // --- UI Rendering ---
+        function renderApp() {
+            appContainer.innerHTML = '';
+            if (cardConfigurations.length === 0) {
+                appContainer.innerHTML = '<p class="text-slate-500 text-center col-span-full">ไม่พบการ์ด กรุณาเพิ่มการ์ดใหม่ในหน้าตั้งค่า</p>';
+            } else {
+                cardConfigurations.forEach((config, index) => createCard(config, index));
+            }
+        }
+
+        function createCard(config, index) {
+            const resultsDivId = `results-${index}`;
+            const cardHtml = `<div id="card-${index}" class="bg-white/90 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-xl p-6 md:p-8 space-y-6"><div class="text-center"><h1 class="text-xl sm:text-2xl font-bold text-slate-800">${config.title}</h1><p class="text-slate-500 mt-2 text-sm sm:text-base">ข้อมูลสำหรับวันที่เลือก</p></div><div id="${resultsDivId}" class="mt-6 p-5 bg-slate-50/70 rounded-xl min-h-[150px] flex items-center justify-center transition-all"><p class="text-slate-500">กำลังโหลด...</p></div></div>`;
+            appContainer.insertAdjacentHTML('beforeend', cardHtml);
+            checkSheetData(config, globalCheckDateInput.value, document.getElementById(resultsDivId));
         }
 
         function renderResults(resultsEl, entries, date, targetCount) {
             resultsEl.innerHTML = '';
-            const uniqueNumbers = new Set(entries.map(entry => entry.number).filter(num => num && num !== 'ไม่มีข้อมูล'));
-            const uniqueUsers = new Set(entries.map(entry => entry.user).filter(user => user && user !== 'ไม่มีข้อมูล'));
-            
-            let statusBlock, detailsBlock;
-
+            const COL_USER_IDX = 7, COL_NUMBER_IDX = 9;
+            const uniqueNumbers = new Set(entries.map(entry => entry[COL_NUMBER_IDX]).filter(Boolean));
+            const uniqueUsers = new Set(entries.map(entry => entry[COL_USER_IDX]).filter(Boolean));
             if (entries.length === 0) {
-                 statusBlock = `
-                    <div class="flex flex-col items-center justify-center text-center text-slate-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        <p class="font-semibold text-slate-700">ไม่พบข้อมูลสำหรับวันที่ ${date}</p>
-                        <p class="text-sm">กรุณาตรวจเช็คออนไลน์ก่อน แล้วตรวจสอบอีกครั้ง</p>
-                    </div>`;
-                resultsEl.innerHTML = statusBlock;
-                return;
+                 resultsEl.innerHTML = `<div class="flex flex-col items-center justify-center text-center text-slate-500"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-2 text-slate-400"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg><p class="font-semibold text-slate-700">ไม่พบข้อมูลสำหรับวันที่ ${date}</p></div>`;
+                 return;
             }
-            
-            if (uniqueNumbers.size >= targetCount) {
-                statusBlock = `
-                    <div class="bg-teal-50 border border-teal-200 text-teal-800 p-4 rounded-xl flex items-center space-x-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>
-                        <div>
-                            <p class="font-bold text-lg">ครบแล้ว</p>
-                            <p class="text-sm">ตรวจครบ ${targetCount} หมายเลขสำหรับวันที่ ${date}</p>
-                        </div>
-                    </div>`;
-            } else {
-                const needed = targetCount - uniqueNumbers.size;
-                statusBlock = `
-                    <div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl flex items-center space-x-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 5a1 1 0 011 1v3a1 1 0 11-2 0V6a1 1 0 011-1zm1 5a1 1 0 10-2 0v2a1 1 0 102 0v-2z" clip-rule="evenodd" /></svg>
-                        <div>
-                             <p class="font-bold text-lg">ยังไม่ครบ (${uniqueNumbers.size}/${targetCount})</p>
-                             <p class="text-sm">ข้อมูลสำหรับวันที่ ${date} ขาดอีก ${needed} หมายเลข</p>
-                        </div>
-                    </div>`;
-            }
-            
-            detailsBlock = `
-                <div class="space-y-4 pt-4 text-sm">
-                    <div class="flex items-start space-x-3">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-slate-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>
-                        <div>
-                            <p class="font-semibold text-slate-600">ผู้ลงข้อมูล:</p>
-                            <p class="text-slate-800">${uniqueUsers.size > 0 ? [...uniqueUsers].join(', ') : 'ไม่พบข้อมูล'}</p>
-                        </div>
-                    </div>
-                     <div class="flex items-start space-x-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-slate-400 mt-0.5" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>
-                        <div>
-                            <p class="font-semibold text-slate-600">หมายเลขที่ตรวจแล้ว (${uniqueNumbers.size} หมายเลข):</p>
-                            <p class="text-slate-800">${uniqueNumbers.size > 0 ? [...uniqueNumbers].join(', ') : 'ไม่พบหมายเลข'}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
+            const statusBlock = uniqueNumbers.size >= targetCount ? 
+                `<div class="bg-teal-50 border border-teal-200 text-teal-800 p-4 rounded-xl flex items-center space-x-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-8 h-8 flex-shrink-0"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><div><p class="font-bold text-lg">ครบแล้ว</p><p class="text-sm">ตรวจครบ ${targetCount} หมายเลข</p></div></div>` :
+                `<div class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl flex items-center space-x-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-8 h-8 flex-shrink-0"><path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg><div><p class="font-bold text-lg">ยังไม่ครบ (${uniqueNumbers.size}/${targetCount})</p><p class="text-sm">ขาดอีก ${targetCount - uniqueNumbers.size} หมายเลข</p></div></div>`;
+            const detailsBlock = `<div class="space-y-4 pt-4 text-sm"><div class="flex items-start space-x-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 flex-shrink-0 text-slate-400 mt-0.5"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.095a1.23 1.23 0 00.41-1.412A9.995 9.995 0 0010 12c-2.31 0-4.438.784-6.131 2.095z" /></svg><div><p class="font-semibold text-slate-600">ผู้ลงข้อมูล:</p><p class="text-slate-800">${uniqueUsers.size > 0 ? [...uniqueUsers].join(', ') : 'ไม่พบ'}</p></div></div><div class="flex items-start space-x-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 flex-shrink-0 text-slate-400 mt-0.5"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm3 2h6v4H7V5z" clip-rule="evenodd" /></svg><div><p class="font-semibold text-slate-600">หมายเลขที่ตรวจแล้ว (${uniqueNumbers.size}):</p><p class="text-slate-800 break-words">${uniqueNumbers.size > 0 ? [...uniqueNumbers].join(', ') : 'ไม่พบ'}</p></div></div></div>`;
             resultsEl.innerHTML = `<div class="w-full">${statusBlock}${detailsBlock}</div>`;
         }
-
-        function renderError(resultsEl, message) {
-            resultsEl.innerHTML = `
-            <div class="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl flex flex-col items-center justify-center text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mb-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" /></svg>
-                <p class="font-bold">เกิดข้อผิดพลาด</p>
-                <p class="text-sm">${message}</p>
-            </div>`;
+        
+        function renderError(resultsEl, msg) {
+            resultsEl.innerHTML = `<div class="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-xl flex flex-col items-center justify-center text-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mb-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg><p class="font-bold">เกิดข้อผิดพลาด</p><p class="text-sm">${msg}</p></div>`;
         }
 
-        // --- Settings Modal Functions ---
-        function openSettingsModal() {
-            settingsModal.style.display = 'flex'; // Use flex to center content
+        // --- Settings Modal ---
+        async function openSettingsModal() {
+            toggleButtonSpinner(settingsButton, true);
+            await loadConfigurations();
+            toggleButtonSpinner(settingsButton, false);
+
+            localCardSettings = JSON.parse(JSON.stringify(cardConfigurations));
             populateCardSelect();
-            updateSettingsInputs();
+            updateSettingsForm();
+            settingsModal.style.display = 'flex';
         }
 
-        function closeSettingsModal() {
+        function closeSettingsModal() { 
             settingsModal.style.display = 'none';
         }
 
         function populateCardSelect() {
-            cardSelect.innerHTML = ''; // Clear existing options
-            if (cardConfigurations.length === 0) {
-                const option = document.createElement('option');
-                option.value = '';
-                option.textContent = 'ไม่มีการ์ดให้เลือก';
-                option.disabled = true;
-                option.selected = true;
-                cardSelect.appendChild(option);
+            const currentVal = cardSelect.value;
+            cardSelect.innerHTML = '';
+            if (localCardSettings.length === 0) {
+                cardSelect.innerHTML = '<option value="-1" disabled selected>ไม่มีการ์ดให้เลือก, กด "เพิ่มการ์ดใหม่"</option>';
             } else {
-                cardConfigurations.forEach((config, index) => {
+                localCardSettings.forEach((config, index) => {
                     const option = document.createElement('option');
                     option.value = index;
                     option.textContent = config.title;
                     cardSelect.appendChild(option);
                 });
-                // Select the current card if it exists
-                if (selectedCardIndex >= 0 && selectedCardIndex < cardConfigurations.length) {
-                    cardSelect.value = selectedCardIndex;
-                } else {
-                    selectedCardIndex = 0; // Default to first card if current index is invalid
-                    cardSelect.value = selectedCardIndex;
-                }
+                cardSelect.value = stillExists(currentVal) ? currentVal : 0;
             }
+            function stillExists(index) { return localCardSettings[index] !== undefined; }
         }
 
-        function updateSettingsInputs() {
-            if (cardConfigurations.length > 0 && selectedCardIndex >= 0 && selectedCardIndex < cardConfigurations.length) {
-                const config = cardConfigurations[selectedCardIndex];
+        function updateSettingsForm() {
+            const index = cardSelect.value;
+            const config = localCardSettings[index];
+            const isCardSelected = config !== undefined;
+
+            settingsFormFields.style.display = isCardSelected ? 'block' : 'none';
+            if (isCardSelected) {
                 titleInput.value = config.title || '';
                 sheetIdInput.value = config.sheetId || '';
                 sheetNameInput.value = config.sheetName || '';
                 targetCountInput.value = config.targetCount || '';
-                deleteCardBtn.disabled = false; // Enable delete button if there's a card
-                titleInput.disabled = false;
-                sheetIdInput.disabled = false;
-                sheetNameInput.disabled = false;
-                targetCountInput.disabled = false;
-                saveSettingsBtn.disabled = false;
-            } else {
-                // No card selected or no cards exist, clear and disable inputs
-                titleInput.value = '';
-                sheetIdInput.value = '';
-                sheetNameInput.value = '';
-                targetCountInput.value = '';
-                deleteCardBtn.disabled = true; // Disable delete button
-                titleInput.disabled = true;
-                sheetIdInput.disabled = true;
-                sheetNameInput.disabled = true;
-                targetCountInput.disabled = true;
-                saveSettingsBtn.disabled = true;
             }
+            
+            saveAllSettingsBtn.disabled = false;
+            deleteCardBtn.disabled = !isCardSelected;
         }
 
-        function handleCardSelectChange() {
-            selectedCardIndex = parseInt(cardSelect.value, 10);
-            updateSettingsInputs();
-        }
-
-        function handleSaveSettings() {
-            if (cardConfigurations.length === 0 || titleInput.disabled) {
-                // Should not happen if inputs are disabled, but as a safeguard
-                return; 
-            }
-
-            const currentConfig = cardConfigurations[selectedCardIndex];
-            currentConfig.title = titleInput.value.trim();
-            currentConfig.sheetId = sheetIdInput.value.trim();
-            currentConfig.sheetName = sheetNameInput.value.trim();
-            currentConfig.targetCount = parseInt(targetCountInput.value, 10);
-
-            if (isNaN(currentConfig.targetCount) || currentConfig.targetCount < 0) {
-                currentConfig.targetCount = 0; // Default or error handling for targetCount
-            }
-
-            saveConfigurations();
-            renderApp(); // Re-render all cards with updated settings
-            populateCardSelect(); // Refresh dropdown in case titles changed
-            closeSettingsModal();
-        }
-
-        function handleAddCard() {
-            const newCard = {
-                title: `การ์ดใหม่ ${cardConfigurations.length + 1}`,
-                sheetId: 'YOUR_SHEET_ID_HERE',
-                sheetName: 'Sheet1',
-                targetCount: 1
+        function handleLocalFormChange() {
+            const index = cardSelect.value;
+            if (index < 0) return;
+            localCardSettings[index] = {
+                ...localCardSettings[index],
+                title: titleInput.value.trim(),
+                sheetId: sheetIdInput.value.trim(),
+                sheetName: sheetNameInput.value.trim(),
+                targetCount: parseInt(targetCountInput.value, 10) || 0
             };
-            cardConfigurations.push(newCard);
-            selectedCardIndex = cardConfigurations.length - 1; // Select the newly added card
-            saveConfigurations();
-            renderApp();
-            populateCardSelect(); // Update dropdown with new card
-            updateSettingsInputs(); // Show new card's details in inputs
+            const option = cardSelect.options[cardSelect.selectedIndex];
+            if (option) option.textContent = localCardSettings[index].title;
+        }
+        
+        function handleAddCard() {
+            const newCard = { title: `การ์ดใหม่ ${localCardSettings.length + 1}`, sheetId: '', sheetName: '', targetCount: 1, localId: `new_${Date.now()}` };
+            localCardSettings.push(newCard);
+            populateCardSelect();
+            cardSelect.value = localCardSettings.length - 1;
+            updateSettingsForm();
         }
 
         function handleDeleteCard() {
-            if (cardConfigurations.length > 0) {
-                showDeleteConfirmation();
-            }
-        }
-
-        function showDeleteConfirmation() {
+            if (cardSelect.value < 0) return;
             deleteConfirmationModal.style.display = 'flex';
         }
-
-        function hideDeleteConfirmation() {
+        
+        function confirmDeletionAction() {
+            localCardSettings.splice(cardSelect.value, 1);
+            populateCardSelect();
+            updateSettingsForm();
             deleteConfirmationModal.style.display = 'none';
         }
+        
+        async function handleSaveAllSettings() {
+            toggleButtonSpinner(saveAllSettingsBtn, true);
+            showFeedback(settingsFeedback, "กำลังบันทึก...", false, 0);
+            try {
+                await apiCall('saveAllSettings', { username: loggedInUser, config: localCardSettings });
+                cardConfigurations = JSON.parse(JSON.stringify(localCardSettings));
+                showFeedback(settingsFeedback, "บันทึกการเปลี่ยนแปลงทั้งหมดสำเร็จ!");
+                
+                setTimeout(() => {
+                    closeSettingsModal();
+                    renderApp(); 
+                }, 1000); 
 
-        function confirmDeletionAction() {
-            cardConfigurations.splice(selectedCardIndex, 1);
-            // Adjust selected index if the last card was deleted, or set to 0
-            if (selectedCardIndex >= cardConfigurations.length && cardConfigurations.length > 0) {
-                selectedCardIndex = cardConfigurations.length - 1;
-            } else if (cardConfigurations.length === 0) {
-                selectedCardIndex = 0; // No cards left
+            } catch (error) {
+                showFeedback(settingsFeedback, error.message, true);
+            } finally {
+                toggleButtonSpinner(saveAllSettingsBtn, false);
             }
-            saveConfigurations();
-            renderApp();
-            populateCardSelect(); // Update dropdown after deletion
-            updateSettingsInputs(); // Clear or show new selected card's details
-            hideDeleteConfirmation(); // Close the confirmation modal
         }
-
-
-        // --- Event Listeners and Initial Load ---
+        
+        // --- Event Listeners & PWA Registration ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Set default date to today for the global input
-            const today = new Date();
-            globalCheckDateInput.value = today.toISOString().split('T')[0];
+            const savedUser = localStorage.getItem('loggedInUsername');
+            if (savedUser) {
+                performSuccessfulLogin(savedUser);
+            }
 
-            loadConfigurations(); // Load settings from localStorage first
-            renderApp(); // Render all cards based on loaded configurations
-
-            // Attach event listener for global date input change
-            globalCheckDateInput.addEventListener('change', renderApp);
-
-            // Attach settings button listeners
-            settingsButton.addEventListener('click', openSettingsModal);
-            closeSettingsModalBtn.addEventListener('click', closeSettingsModal);
-            cardSelect.addEventListener('change', handleCardSelectChange);
-            saveSettingsBtn.addEventListener('click', handleSaveSettings);
-            addCardBtn.addEventListener('click', handleAddCard);
-            deleteCardBtn.addEventListener('click', handleDeleteCard);
-            
-            // Attach delete confirmation modal listeners
-            confirmDeleteBtn.addEventListener('click', confirmDeletionAction);
-            cancelDeleteBtn.addEventListener('click', hideDeleteConfirmation);
-
-            // Add event listener to the refresh button
-            refreshButton.addEventListener('click', renderApp);
-
-
-            // Register Service Worker
+            // Register Service Worker for PWA
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/checklist/sw.js') // Updated path to /checklist/sw.js
-                        .then(registration => {
-                            console.log('Service Worker registered:', registration);
-                        })
-                        .catch(error => {
-                            console.error('Service Worker registration failed:', error);
-                        });
+                    navigator.serviceWorker.register('./sw.js')
+                        .then(registration => console.log('ServiceWorker registration successful with scope: ', registration.scope))
+                        .catch(err => console.log('ServiceWorker registration failed: ', err));
                 });
             }
+
+            loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+            showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); switchAuthScreen(true); });
+            showLoginLink.addEventListener('click', (e) => { e.preventDefault(); switchAuthScreen(false); });
+            globalCheckDateInput.addEventListener('change', renderApp);
+            refreshButton.addEventListener('click', () => {
+                toggleButtonSpinner(refreshButton, true);
+                Object.keys(dataCache).forEach(key => delete dataCache[key]);
+                renderApp();
+                setTimeout(() => toggleButtonSpinner(refreshButton, false), 500);
+            });
+            logoutButton.addEventListener('click', handleLogout);
+            settingsButton.addEventListener('click', openSettingsModal);
+            closeSettingsModalBtn.addEventListener('click', () => {
+                closeSettingsModal();
+                renderApp();
+            });
+            cardSelect.addEventListener('change', updateSettingsForm);
+            [titleInput, sheetIdInput, sheetNameInput, targetCountInput].forEach(el => el.addEventListener('input', handleLocalFormChange));
+            saveAllSettingsBtn.addEventListener('click', handleSaveAllSettings);
+            addCardBtn.addEventListener('click', handleAddCard);
+            deleteCardBtn.addEventListener('click', handleDeleteCard);
+            confirmDeleteBtn.addEventListener('click', confirmDeletionAction);
+            cancelDeleteBtn.addEventListener('click', () => deleteConfirmationModal.style.display = 'none');
         });
     </script>
 </body>
