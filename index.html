@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตรวจสอบข้อมูลหลายชีต</title>
+    <title>ตรวจสอบข้อมูลออนไลน์</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Web App Manifest for PWA capabilities -->
-    <link rel="manifest" href="/ตรวจสอบข้อมูลออนไลน์/manifest.json">
+    <link rel="manifest" href="/checklist/manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Multi-Sheet Checker">
     <meta name="mobile-web-app-capable" content="yes"> <!-- Added for modern PWA compatibility -->
-    <link rel="apple-touch-icon" href="/ตรวจสอบข้อมูลออนไลน์/icons/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/ตรวจสอบข้อมูลออนไลน์/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/ตรวจสอบข้อมูลออนไลน์/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/checklist/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/checklist/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/checklist/icons/favicon-16x16.png">
     <meta name="theme-color" content="#3B82F6"> <!-- Matches blue-500 from Tailwind -->
 
     <style>
@@ -582,7 +582,7 @@
             // Register Service Worker
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/ตรวจสอบข้อมูลออนไลน์/sw.js') // Updated path
+                    navigator.serviceWorker.register('/checklist/sw.js') // Updated path to /checklist/sw.js
                         .then(registration => {
                             console.log('Service Worker registered:', registration);
                         })
