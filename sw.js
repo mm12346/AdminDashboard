@@ -1,5 +1,5 @@
 // ชื่อของ Cache Storage ที่จะใช้เก็บไฟล์
-const CACHE_NAME = 'online-checker-cache-v1';
+const CACHE_NAME = 'online-checker-cache-v1.1';
 
 // รายการไฟล์ที่ต้องการให้ถูกแคชไว้เพื่อให้ทำงานออฟไลน์ได้
 const urlsToCache = [
