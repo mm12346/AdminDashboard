@@ -1,16 +1,18 @@
-const CACHE_NAME = 'multi-sheet-checker-v1';
+const CACHE_NAME = 'multi-sheet-checker-v1.1';
+const BASE_PATH = '/ตรวจสอบข้อมูลออนไลน์'; // Define base path here
+
 const urlsToCache = [
-    '/',
-    '/index.html', // Assuming the HTML file is named index.html
-    '/manifest.json',
+    `${BASE_PATH}/`,
+    `${BASE_PATH}/index.html`, // Assuming the HTML file is named index.html
+    `${BASE_PATH}/manifest.json`,
     'https://cdn.tailwindcss.com',
     'https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap',
     'https://fonts.gstatic.com/s/sarabun/v15/DtVjJx26T-Uz-FKzZB_H9xL8dC1JzD_hJ-8.woff2', // Sarabun font WOFF2
-    '/icons/icon-192x192.png', // Placeholder, replace with actual icon paths
-    '/icons/icon-512x512.png',
-    '/icons/apple-touch-icon-180x180.png',
-    '/icons/favicon-32x32.png',
-    '/icons/favicon-16x16.png'
+    `${BASE_PATH}/icons/icon-192x192.png`, // Placeholder, replace with actual icon paths
+    `${BASE_PATH}/icons/icon-512x512.png`,
+    `${BASE_PATH}/icons/apple-touch-icon-180x180.png`,
+    `${BASE_PATH}/icons/favicon-32x32.png`,
+    `${BASE_PATH}/icons/favicon-16x16.png`
     // Add other assets you want to cache (e.g., images, other JS files)
 ];
 
@@ -83,6 +85,10 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
+        })
+    );
+});
+
         })
     );
 });
