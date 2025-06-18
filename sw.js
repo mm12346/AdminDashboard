@@ -1,5 +1,5 @@
 const CACHE_NAME = 'multi-sheet-checker-v1.1';
-const BASE_PATH = '/ตรวจสอบข้อมูลออนไลน์'; // Define base path here
+const BASE_PATH = '/checklist'; // Define base path here - Corrected to 'checklist'
 
 const urlsToCache = [
     `${BASE_PATH}/`,
@@ -85,10 +85,6 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        })
-    );
-});
-
         })
     );
 });
