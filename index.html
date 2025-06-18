@@ -29,96 +29,104 @@
         .loader-lg { width: 48px; height: 48px; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-slate-50">
+<body class="bg-slate-50">
 
-    <!-- Auth Container -->
-    <div id="auth-container" class="w-full max-w-md">
-        <!-- Login Screen -->
-        <div id="login-screen">
-            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
-                <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">ลงชื่อเข้าใช้</h2>
-                <p class="text-center text-slate-500 mb-8">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
-                <form id="login-form">
-                    <div class="space-y-6">
-                        <div>
-                            <label for="username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
-                            <input type="text" id="username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+    <!-- Auth Wrapper -->
+    <div id="auth-wrapper" class="min-h-screen flex items-center justify-center p-4">
+        <div id="auth-container" class="w-full max-w-md">
+            <!-- Login Screen -->
+            <div id="login-screen">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">ลงชื่อเข้าใช้</h2>
+                    <p class="text-center text-slate-500 mb-8">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบ</p>
+                    <form id="login-form">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
+                                <input type="text" id="username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
+                                <input type="password" id="password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
                         </div>
-                        <div>
-                            <label for="password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
-                            <input type="password" id="password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
-                        </div>
-                    </div>
-                    <div id="login-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
-                    <button type="submit" class="w-full mt-4 px-6 py-4 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
-                        <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <span class="text">เข้าสู่ระบบ</span>
-                    </button>
-                </form>
-                <p class="text-center text-sm text-slate-500 mt-6">
-                    ยังไม่มีบัญชี? <a href="#" id="show-register-link" class="font-medium text-blue-600 hover:text-blue-500">ลงทะเบียนที่นี่</a>
-                </p>
+                        <div id="login-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
+                        <button type="submit" class="w-full mt-4 px-6 py-4 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                            <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span class="text">เข้าสู่ระบบ</span>
+                        </button>
+                    </form>
+                    <p class="text-center text-sm text-slate-500 mt-6">
+                        ยังไม่มีบัญชี? <a href="#" id="show-register-link" class="font-medium text-blue-600 hover:text-blue-500">ลงทะเบียนที่นี่</a>
+                    </p>
+                </div>
             </div>
-        </div>
-        
-        <!-- Register Screen (Initially hidden) -->
-        <div id="register-screen" class="hidden">
-            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
-                <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">ลงทะเบียนที่นี่</h2>
-                <p class="text-center text-slate-500 mb-8">สร้างบัญชีเพื่อเริ่มใช้งาน</p>
-                <form id="register-form">
-                    <div class="space-y-6">
-                        <div>
-                            <label for="register-username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
-                            <input type="text" id="register-username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+            
+            <!-- Register Screen (Initially hidden) -->
+            <div id="register-screen" class="hidden">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h2 class="text-3xl font-bold text-center text-slate-800 mb-2">ลงทะเบียนที่นี่</h2>
+                    <p class="text-center text-slate-500 mb-8">สร้างบัญชีเพื่อเริ่มใช้งาน</p>
+                    <form id="register-form">
+                        <div class="space-y-6">
+                            <div>
+                                <label for="register-username" class="block text-sm font-medium text-slate-600 mb-1">ชื่อผู้ใช้</label>
+                                <input type="text" id="register-username" name="username" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
+                            <div>
+                                <label for="register-password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
+                                <input type="password" id="register-password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
+                            <div>
+                                <label for="confirm-password" class="block text-sm font-medium text-slate-600 mb-1">ยืนยันรหัสผ่าน</label>
+                                <input type="password" id="confirm-password" name="confirmPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                            </div>
                         </div>
-                        <div>
-                            <label for="register-password" class="block text-sm font-medium text-slate-600 mb-1">รหัสผ่าน</label>
-                            <input type="password" id="register-password" name="password" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
-                        </div>
-                        <div>
-                            <label for="confirm-password" class="block text-sm font-medium text-slate-600 mb-1">ยืนยันรหัสผ่าน</label>
-                            <input type="password" id="confirm-password" name="confirmPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
-                        </div>
-                    </div>
-                    <div id="register-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
-                    <div id="register-success" class="mt-4 text-center text-green-600 text-sm h-5"></div>
-                    <button type="submit" class="w-full mt-4 px-6 py-4 bg-green-500 text-white font-semibold rounded-xl shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
-                        <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        <span class="text">ลงทะเบียน</span>
-                    </button>
-                </form>
-                 <p class="text-center text-sm text-slate-500 mt-6">
-                    มีบัญชีอยู่แล้ว? <a href="#" id="show-login-link" class="font-medium text-blue-600 hover:text-blue-500">กลับไปหน้าล็อกอิน</a>
-                </p>
+                        <div id="register-error" class="mt-4 text-center text-red-500 text-sm h-5"></div>
+                        <div id="register-success" class="mt-4 text-center text-green-600 text-sm h-5"></div>
+                        <button type="submit" class="w-full mt-4 px-6 py-4 bg-green-500 text-white font-semibold rounded-xl shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                            <svg class="spinner animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <span class="text">ลงทะเบียน</span>
+                        </button>
+                    </form>
+                     <p class="text-center text-sm text-slate-500 mt-6">
+                        มีบัญชีอยู่แล้ว? <a href="#" id="show-login-link" class="font-medium text-blue-600 hover:text-blue-500">กลับไปหน้าล็อกอิน</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Main App Screen (Initially hidden) -->
-    <div id="main-app" class="hidden w-full max-w-7xl flex-col items-center">
-        <div class="w-full max-w-4xl mb-6 flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
-            <div class="flex-grow w-full sm:w-auto">
-                <input type="date" id="globalCheckDate" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+    <div id="main-app" class="hidden">
+        <header class="sticky top-0 z-10 w-full bg-white/90 backdrop-blur-sm shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="py-4 flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
+                    <div class="flex-grow w-full sm:w-auto">
+                        <input type="date" id="globalCheckDate" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+                    <div class="flex gap-2 sm:gap-4 flex-wrap justify-center">
+                        <button id="refreshButton" class="px-4 py-3 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                             <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                             <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                            <span class="text">รีเฟรช</span>
+                        </button>
+                        <button id="settingsButton" class="px-4 py-3 bg-slate-600 text-white font-semibold rounded-xl shadow-lg hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
+                             <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                             <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
+                            <span class="text">ตั้งค่า</span>
+                        </button>
+                        <button id="logoutButton" class="px-4 py-3 bg-red-500 text-white font-semibold rounded-xl shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition flex items-center space-x-2">
+                             <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
+                            <span class="text">ออกจากระบบ</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="flex gap-2 sm:gap-4 flex-wrap justify-center">
-                <button id="refreshButton" class="px-4 py-3 bg-blue-500 text-white font-semibold rounded-xl shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
-                     <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
-                    <span class="text">รีเฟรช</span>
-                </button>
-                <button id="settingsButton" class="px-4 py-3 bg-slate-600 text-white font-semibold rounded-xl shadow-lg hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 transition flex items-center justify-center space-x-2 disabled:opacity-50">
-                     <svg class="spinner animate-spin h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" /></svg>
-                    <span class="text">ตั้งค่า</span>
-                </button>
-                <button id="logoutButton" class="px-4 py-3 bg-red-500 text-white font-semibold rounded-xl shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition flex items-center space-x-2">
-                     <svg class="icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
-                    <span class="text">ออกจากระบบ</span>
-                </button>
-            </div>
-        </div>
-        <div id="app-container" class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </header>
+        <main>
+            <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </main>
     </div>
 
     <!-- Settings Modal -->
@@ -182,7 +190,7 @@
         const dataCache = {};
 
         // --- DOM Elements ---
-        const authContainer = document.getElementById('auth-container'),
+        const authWrapper = document.getElementById('auth-wrapper'),
             loginScreen = document.getElementById('login-screen'),
             loginForm = document.getElementById('login-form'),
             loginError = document.getElementById('login-error'),
@@ -225,15 +233,20 @@
             const spinner = button.querySelector('.spinner');
             const icon = button.querySelector('.icon');
             const text = button.querySelector('.text');
+
             if (spinner) spinner.classList.toggle('hidden', !show);
-            // Hide icon if it exists, otherwise hide text
+
+            // This handles buttons with an icon and text, or just text.
             if (icon) {
                  icon.classList.toggle('hidden', show);
+                 text.classList.toggle('hidden', show); // Show text when not loading
             } else if (text) {
                  text.classList.toggle('hidden', show);
             }
+
             button.disabled = show;
         }
+
 
         async function apiCall(action, payload = {}) {
             const isGet = action.startsWith('load') || action.startsWith('get');
@@ -260,8 +273,8 @@
         async function performSuccessfulLogin(username) {
             loggedInUser = username;
             localStorage.setItem('loggedInUsername', username); // Save user to localStorage
-            authContainer.style.display = 'none';
-            mainApp.style.display = 'flex';
+            authWrapper.style.display = 'none';
+            mainApp.style.display = 'block';
             await initializeMainApp();
         }
 
@@ -305,7 +318,7 @@
 
         function handleLogout() {
             mainApp.style.display = 'none';
-            authContainer.style.display = 'block';
+            authWrapper.style.display = 'flex';
             switchAuthScreen(false);
             loginForm.reset();
             appContainer.innerHTML = '';
