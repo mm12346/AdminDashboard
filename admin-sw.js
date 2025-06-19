@@ -1,5 +1,5 @@
 // ชื่อของ Cache Storage ที่จะใช้เก็บไฟล์สำหรับหน้าแอดมิน
-const CACHE_NAME = 'admin-checker-cache-v1';
+const CACHE_NAME = 'admin-checker-cache-v2';
 
 // รายการไฟล์ที่ต้องการให้ถูกแคชไว้
 const urlsToCache = [
