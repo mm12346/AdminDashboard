@@ -9,6 +9,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
     
+    <!-- PWA Manifest & Theme for Admin -->
+    <link rel="manifest" href="admin-manifest.json">
+    <meta name="theme-color" content="#4338ca">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Admin Checker">
+    
     <style>
         body { font-family: 'Sarabun', sans-serif; background-color: #f1f5f9; }
         .loader-sm { width: 20px; height: 20px; }
@@ -51,7 +59,6 @@
 
 
     <script>
-        // *** สำคัญ: นำ URL ที่ได้จากการ Deploy Apps Script สำหรับ Admin มาใส่ที่นี่ ***
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzbnI6LiDVZsC4-1iMuV9CtMeN320QbHL6KxR9tl8CK58TAmwq8KB1rPTFwWzljMinm/exec'; 
         let cardConfigurations = [];
         const dataCache = {};
@@ -184,6 +191,15 @@
         
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Register Service Worker for PWA
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./admin-sw.js')
+                        .then(registration => console.log('Admin ServiceWorker registration successful with scope: ', registration.scope))
+                        .catch(err => console.log('Admin ServiceWorker registration failed: ', err));
+                });
+            }
+
             globalCheckDateInput.value = new Date().toISOString().split('T')[0];
             loadAllUsers();
             
