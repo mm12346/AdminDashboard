@@ -5,7 +5,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
     // 1. เพิ่ม base สำหรับการ Deploy บน GitHub Pages
-    base: '/<ชื่อ-repository-ของคุณ>/',
+    base: '/AdminDashboard/',
 
     // 2. ส่วนของการกำหนด Environment Variables (เหมือนเดิม)
     define: {
